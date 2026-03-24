@@ -6,13 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Producto extends Model
 {
-    // Esto permite que podamos guardar datos en estas columnas desde un formulario
     protected $fillable = [
         'nombre', 
         'marca', 
-        'categoria', 
+        'categoria_id', // <-- CAMBIADO de 'categoria' a 'categoria_id'
         'existencias', 
         'precio_compra', 
         'precio_venta'
     ];
+
+    // Esta función es la que "conecta" con la tabla de categorías
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class, 'categoria_id');
+    }
 }
