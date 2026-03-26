@@ -34,12 +34,12 @@ class ProductoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre'       => 'required|string|max:30', // AHORA 30
+            'nombre'       => 'required|string|max:30', 
             'marca'        => 'required|string|max:30', 
             'categoria_id' => 'required',
-            'existencias'  => 'required|integer',
-            'precio_compra'=> 'required|numeric',
-            'precio_venta' => 'required|numeric',
+            'existencias'  => 'required|integer|max:10000', // Límite de 10,000 unidades
+            'precio_compra'=> 'required|numeric|max:1000',  // Límite de 1,000
+            'precio_venta' => 'required|numeric|max:1000',  // Límite de 1,000
         ]);
 
         Producto::create($request->all());
@@ -49,12 +49,12 @@ class ProductoController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nombre'       => 'required|string|max:30', // AHORA 30
+            'nombre'       => 'required|string|max:30', 
             'marca'        => 'required|string|max:30',
             'categoria_id' => 'required',
-            'existencias'  => 'required|integer',
-            'precio_compra'=> 'required|numeric',
-            'precio_venta' => 'required|numeric',
+            'existencias'  => 'required|integer|max:10000', // Límite de 10,000 unidades
+            'precio_compra'=> 'required|numeric|max:1000',  // Límite de 1,000
+            'precio_venta' => 'required|numeric|max:1000',  // Límite de 1,000
         ]);
 
         $producto = Producto::findOrFail($id);

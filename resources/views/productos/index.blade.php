@@ -128,15 +128,18 @@
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label class="form-label small fw-bold">Stock Inicial</label>
-                                <input type="number" name="existencias" class="form-control bg-light border-0" required min="0">
+                                <input type="number" name="existencias" class="form-control bg-light border-0" required min="0" max="10000">
+                                <span class="text-limit">Máximo 10,000</span>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label class="form-label small fw-bold">P. Compra</label>
-                                <input type="number" step="0.01" name="precio_compra" class="form-control bg-light border-0" required min="0">
+                                <input type="number" step="0.01" name="precio_compra" class="form-control bg-light border-0" required min="0" max="1000">
+                                <span class="text-limit">Máximo $1,000</span>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label class="form-label small fw-bold">P. Venta</label>
-                                <input type="number" step="0.01" name="precio_venta" class="form-control bg-light border-0 fw-bold text-success" required min="0">
+                                <input type="number" step="0.01" name="precio_venta" class="form-control bg-light border-0 fw-bold text-success" required min="0" max="1000">
+                                <span class="text-limit">Máximo $1,000</span>
                             </div>
                         </div>
                     </div>
@@ -171,17 +174,20 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label small fw-bold">Existencias</label>
-                                <input type="number" name="existencias" id="edit_existencias" class="form-control bg-light border-0" required min="0">
+                                <input type="number" name="existencias" id="edit_existencias" class="form-control bg-light border-0" required min="0" max="10000">
+                                <span class="text-limit">Máximo 10,000</span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label small fw-bold">P. Compra</label>
-                                <input type="number" step="0.01" name="precio_compra" id="edit_compra" class="form-control bg-light border-0" required min="0">
+                                <input type="number" step="0.01" name="precio_compra" id="edit_compra" class="form-control bg-light border-0" required min="0" max="1000">
+                                <span class="text-limit">Máximo $1,000</span>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label small fw-bold">P. Venta</label>
-                                <input type="number" step="0.01" name="precio_venta" id="edit_venta" class="form-control bg-light border-0 fw-bold text-success" required min="0">
+                                <input type="number" step="0.01" name="precio_venta" id="edit_venta" class="form-control bg-light border-0 fw-bold text-success" required min="0" max="1000">
+                                <span class="text-limit">Máximo $1,000</span>
                             </div>
                         </div>
                         <input type="hidden" name="categoria_id" id="edit_cat_id">
