@@ -10,71 +10,63 @@ class ProductoController extends Controller
 {
     public function index()
     {
-        // SURTIDO AUTOMÁTICO
-        $productosBajos = Producto::where('existencias', '<', 5)->get();
-        
-        $huboCambios = false;
-        foreach ($productosBajos as $p) {
-            $p->existencias += 50;
-            $p->save();
-            $huboCambios = true;
-        }
-
-        // Si surtió algo, recargamos para que el usuario vea los números actualizados
-        if ($huboCambios) {
-            return redirect()->route('productos.index')->with('success', 'Stock actualizado automáticamente.');
-        }
+        // Esto está bien, pero cuidado: se ejecuta cada vez que entras a la lista
+        Producto::where('existencias', '<', 5)->increment('existencias', 50);
 
         $productos = Producto::with('categoria')->orderBy('id', 'desc')->get();
-        $categorias = Categoria::all(); 
+        $categorias = Categoria::orderBy('nombre', 'asc')->get(); 
         
         return view('productos.index', compact('productos', 'categorias'));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'nombre'       => 'required|string|max:30', 
-            'marca'        => 'required|string|max:30', 
-            'categoria_id' => 'required',
-            'existencias'  => 'required|integer|max:10000', // Límite de 10,000 unidades
-            'precio_compra'=> 'required|numeric|max:1000',  // Límite de 1,000
-            'precio_venta' => 'required|numeric|max:1000',  // Límite de 1,000
+        $data = $request->validate([
+            'nombre'       => 'required|string|min:2|max:30', 
+            'marca'        => 'required|string|min:2|max:30', 
+            'categoria_id' => 'required|exists:categorias,id',
+            'existencias'  => 'required|integer|min:0|max:10000',
+            'precio_compra'=> 'required|numeric|min:0.01|max:999999',
+            'precio_venta' => 'required|numeric|min:0.01|gt:precio_compra|max:999999',
+        ], [
+            'precio_venta.gt' => 'El precio de venta debe ser mayor al precio de compra.'
         ]);
 
-        Producto::create($request->all());
+        // Usamos fillable o guardamos directamente
+        Producto::create($data);
+        
         return redirect()->route('productos.index')->with('success', '¡Producto registrado con éxito!');
     }
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'nombre'       => 'required|string|max:30', 
-            'marca'        => 'required|string|max:30',
-            'categoria_id' => 'required',
-            'existencias'  => 'required|integer|max:10000', // Límite de 10,000 unidades
-            'precio_compra'=> 'required|numeric|max:1000',  // Límite de 1,000
-            'precio_venta' => 'required|numeric|max:1000',  // Límite de 1,000
+        $data = $request->validate([
+            'nombre'       => 'required|string|min:2|max:30', 
+            'marca'        => 'required|string|min:2|max:30',
+            // Agregamos categoria_id aquí también por si se edita
+            'categoria_id' => 'required|exists:categorias,id', 
+            'existencias'  => 'required|integer|min:0|max:10000',
+            'precio_compra'=> 'required|numeric|min:0.01|max:999999',
+            'precio_venta' => 'required|numeric|min:0.01|gt:precio_compra|max:999999',
+        ], [
+            'precio_venta.gt' => 'Error: El precio de venta debe ser mayor al de compra.'
         ]);
 
         $producto = Producto::findOrFail($id);
-        $producto->update($request->all());
+        $producto->update($data);
 
         return redirect()->route('productos.index')->with('success', 'Producto actualizado correctamente');
     }
 
     public function destroy($id)
     {
-        $producto = Producto::findOrFail($id);
-        $producto->delete();
+        Producto::findOrFail($id)->delete();
         return redirect()->route('productos.index')->with('success', 'Producto eliminado');
     }
 
     public function surtir($id)
     {
-        $producto = Producto::findOrFail($id);
-        $producto->existencias += 50;
-        $producto->save();
-        return redirect()->route('productos.index')->with('success', 'Se han surtido 50 unidades a ' . $producto->nombre);
+        Producto::findOrFail($id)->increment('existencias', 50);
+        return redirect()->route('productos.index')->with('success', 'Stock actualizado correctamente.');
     }
 }
