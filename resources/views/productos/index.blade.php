@@ -119,12 +119,18 @@
                     <div class="modal-body p-4">
                         <div class="mb-3">
                             <label class="form-label small fw-bold">Nombre del Producto</label>
-                            <input type="text" name="nombre" class="form-control bg-light border-0" required minlength="2" maxlength="30">
+                            <input type="text" name="nombre" class="form-control bg-light border-0" 
+                                   required minlength="2" maxlength="30" 
+                                   pattern="^[a-zA-Z\sñÑáéíóúÁÉÍÓÚ]+$" title="Solo letras y espacios">
+                            <div class="invalid-feedback">El nombre es obligatorio (solo letras).</div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label small fw-bold">Marca</label>
-                                <input type="text" name="marca" class="form-control bg-light border-0" required minlength="2" maxlength="30">
+                                <input type="text" name="marca" class="form-control bg-light border-0" 
+                                       required minlength="2" maxlength="30" 
+                                       pattern="^[a-zA-Z\sñÑáéíóúÁÉÍÓÚ]+$" title="Solo letras y espacios">
+                                <div class="invalid-feedback">La marca es obligatoria (solo letras).</div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label small fw-bold">Categoría</label>
@@ -134,6 +140,7 @@
                                         <option value="{{ $cat->id }}">{{ $cat->nombre }}</option>
                                     @endforeach
                                 </select>
+                                <div class="invalid-feedback">Selecciona una categoría.</div>
                             </div>
                         </div>
                         <div class="row">
@@ -171,12 +178,16 @@
                     <div class="modal-body p-4">
                         <div class="mb-3">
                             <label class="form-label small fw-bold">Nombre</label>
-                            <input type="text" name="nombre" id="edit_nombre" class="form-control bg-light border-0" required minlength="2" maxlength="30">
+                            <input type="text" name="nombre" id="edit_nombre" class="form-control bg-light border-0" 
+                                   required minlength="2" maxlength="30" 
+                                   pattern="^[a-zA-Z\sñÑáéíóúÁÉÍÓÚ]+$" title="Solo letras y espacios">
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label small fw-bold">Marca</label>
-                                <input type="text" name="marca" id="edit_marca" class="form-control bg-light border-0" required minlength="2" maxlength="30">
+                                <input type="text" name="marca" id="edit_marca" class="form-control bg-light border-0" 
+                                       required minlength="2" maxlength="30" 
+                                       pattern="^[a-zA-Z\sñÑáéíóúÁÉÍÓÚ]+$" title="Solo letras y espacios">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label small fw-bold">Existencias</label>

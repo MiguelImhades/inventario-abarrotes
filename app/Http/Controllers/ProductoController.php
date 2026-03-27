@@ -10,7 +10,6 @@ class ProductoController extends Controller
 {
     public function index()
     {
-        // Esto está bien, pero cuidado: se ejecuta cada vez que entras a la lista
         Producto::where('existencias', '<', 5)->increment('existencias', 50);
 
         $productos = Producto::with('categoria')->orderBy('id', 'desc')->get();
@@ -22,33 +21,35 @@ class ProductoController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'nombre'       => 'required|string|min:2|max:30', 
-            'marca'        => 'required|string|min:2|max:30', 
+            // La regex asegura solo letras y espacios
+            'nombre'       => 'required|string|min:2|max:30|regex:/^[a-zA-Z\sñÑáéíóúÁÉÍÓÚ]+$/', 
+            'marca'        => 'required|string|min:2|max:30|regex:/^[a-zA-Z\sñÑáéíóúÁÉÍÓÚ]+$/', 
             'categoria_id' => 'required|exists:categorias,id',
             'existencias'  => 'required|integer|min:0|max:10000',
             'precio_compra'=> 'required|numeric|min:0.01|max:999999',
             'precio_venta' => 'required|numeric|min:0.01|gt:precio_compra|max:999999',
         ], [
+            'nombre.regex'    => 'El nombre solo puede contener letras.',
+            'marca.regex'     => 'La marca solo puede contener letras.',
             'precio_venta.gt' => 'El precio de venta debe ser mayor al precio de compra.'
         ]);
 
-        // Usamos fillable o guardamos directamente
         Producto::create($data);
-        
         return redirect()->route('productos.index')->with('success', '¡Producto registrado con éxito!');
     }
 
     public function update(Request $request, $id)
     {
         $data = $request->validate([
-            'nombre'       => 'required|string|min:2|max:30', 
-            'marca'        => 'required|string|min:2|max:30',
-            // Agregamos categoria_id aquí también por si se edita
+            'nombre'       => 'required|string|min:2|max:30|regex:/^[a-zA-Z\sñÑáéíóúÁÉÍÓÚ]+$/', 
+            'marca'        => 'required|string|min:2|max:30|regex:/^[a-zA-Z\sñÑáéíóúÁÉÍÓÚ]+$/',
             'categoria_id' => 'required|exists:categorias,id', 
             'existencias'  => 'required|integer|min:0|max:10000',
             'precio_compra'=> 'required|numeric|min:0.01|max:999999',
             'precio_venta' => 'required|numeric|min:0.01|gt:precio_compra|max:999999',
         ], [
+            'nombre.regex'    => 'El nombre solo puede contener letras.',
+            'marca.regex'     => 'La marca solo puede contener letras.',
             'precio_venta.gt' => 'Error: El precio de venta debe ser mayor al de compra.'
         ]);
 
